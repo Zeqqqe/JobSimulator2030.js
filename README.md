@@ -1,39 +1,21 @@
 # JobSimulator2030.js
+A simple recreation of the easter egg mini-game in Job Simulator.
 
-A simple, JavaScript-based recreation of the archival menu **easter egg** from the popular game *Job Simulator*.
+## How To Use
 
----
+- Open a New Tab
+    - Open a new tab in your web browser
+- Open Dev Tools
+    - Press `Ctrl + Shift + I`, `Ctrl + Shift + J`. or `F12`.
+- Paste The Code
+    - Paste the contents of [JobSimulator2030.js](https://raw.githubusercontent.com/ackozu/JobSimulator2030.js/refs/heads/main/JobSimulator2030.js) into the console
+ 
+## What This Is
+- This is a simple recreation of the easter egg mini-game in Job Simulator, you can access the mini-game by going into the web-browser in the office worker job, and then going to gameshare.ware
 
-### About the Project
+## Copyable Code
 
-This script, **JobSimulator2030.js**, simulates the nested menu system found as an easter egg in *Job Simulator*. It allows users to navigate through different "job archives.", select a specific job, and then view details about a particular item or task within that job. The script uses a structured object to store all the menu data, allowing for easy expansion and modification. It runs as a single session in your browser's developer console, guiding you through the options with interactive `prompt` and `alert` dialogs.
-
----
-
-### How to Use
-
-1.  **Open a new tab**
-2.  **Copy the code**: Select and copy the entire JavaScript code block provided below.
-3.  **Open your console**: Open your web browser's developer console (F12 or Ctrl+Shift+I).
-4.  **Paste and run**: Paste the code into the console and press **Enter**.
-
-The script will begin immediately, and you can follow the on-screen instructions to navigate the archives.
-
----
-
-### Code Overview
-
-| Component | Description |
-| :--- | :--- |
-| **`archives` Object** | A JavaScript object that stores all the job titles and their corresponding descriptions. This is the central source of all the game's content and can be easily modified. |
-| **Dynamic Menu Generation** | The menu text is generated dynamically by iterating through the `archives` object keys, ensuring that all jobs are correctly displayed and numbered. |
-| **Error Handling** | The script includes basic checks to handle invalid or out-of-range inputs. If you enter an invalid number, an `alert` will appear, and the script will exit. |
-
----
-
-### Copyable Code
-
-```javascript
+```JavaScript
 // A script that simulates the Job Simulator menu with numbered, nested options.
 
 // Step 1: Store the menu data in a structured object.
@@ -71,47 +53,59 @@ const archives = {
 // Step 2: Get a list of the main menu titles for easy numbering.
 const mainMenuTitles = Object.keys(archives);
 
-// Step 3: Build the main menu text.
-let mainMenuText = "Job Simulator Archives Menu:\n\n";
-for (let i = 0; i < mainMenuTitles.length; i++) {
-    const title = mainMenuTitles[i].toLowerCase().split(' ').map(word => {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-    }).join(' ');
-    
-    mainMenuText += `${i}: ${title}\n`;
-}
-mainMenuText += "\nType a number to select a job.";
-
-let userMainChoice = prompt(mainMenuText);
-
-// Check if the user's main choice is a valid number.
-if (userMainChoice !== null) {
-    let mainChoiceIndex = Number(userMainChoice);
-    if (mainChoiceIndex >= 0 && mainChoiceIndex < mainMenuTitles.length) {
+// Step 3: Start the game loop.
+while (true) {
+    let mainMenuText = "Job Simulator Archives Menu:\n\n";
+    // Build the main menu text with corrected capitalization.
+    for (let i = 0; i < mainMenuTitles.length; i++) {
+        // Here's the new logic: Convert to lowercase, then capitalize the first letter of each word.
+        const title = mainMenuTitles[i].toLowerCase().split(' ').map(word => {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        }).join(' ');
         
-        const selectedJob = archives[mainMenuTitles[mainChoiceIndex]];
+        mainMenuText += `${i}: ${title}\n`;
+    }
+    mainMenuText += "\nType a number to select a job.";
 
-        // Step 4: Show the sub-menu.
-        let subMenuText = `${mainMenuTitles[mainChoiceIndex].toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} Archives:\n\n`;
-        for (let i = 0; i < selectedJob.options.length; i++) {
-            subMenuText += `${i}: ${selectedJob.options[i].split('.')[0]}\n`;
-        }
-        subMenuText += "\nType a number to view an archive entry.";
+    let userMainChoice = prompt(mainMenuText);
 
-        let userSubChoice = prompt(subMenuText);
+    // Check if the user's choice is a valid number for the main menu.
+    if (userMainChoice !== null) {
+        let mainChoiceIndex = Number(userMainChoice);
+        if (mainChoiceIndex >= 0 && mainChoiceIndex < mainMenuTitles.length) {
+            
+            // Get the selected job's options.
+            const selectedJob = archives[mainMenuTitles[mainChoiceIndex]];
 
-        // Step 5: Check if the user's sub-choice is valid.
-        if (userSubChoice !== null) {
-            let subChoiceIndex = Number(userSubChoice);
-            if (subChoiceIndex >= 0 && subChoiceIndex < selectedJob.options.length) {
-                alert(selectedJob.options[subChoiceIndex]);
-            } else {
-                alert("Invalid selection. Please try again.");
+            // Step 4: Show the sub-menu.
+            let subMenuText = `${mainMenuTitles[mainChoiceIndex].toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} Archives:\n\n`;
+            for (let i = 0; i < selectedJob.options.length; i++) {
+                subMenuText += `${i}: ${selectedJob.options[i].split('.')[0]}\n`;
             }
+            subMenuText += "\nType a number to view an archive entry.";
+
+            let userSubChoice = prompt(subMenuText);
+
+            // Step 5: Check if the user's sub-choice is valid.
+            if (userSubChoice !== null) {
+                let subChoiceIndex = Number(userSubChoice);
+                if (subChoiceIndex >= 0 && subChoiceIndex < selectedJob.options.length) {
+                    alert(selectedJob.options[subChoiceIndex]);
+                    break;
+                } else {
+                    alert("Invalid selection. Please try again.");
+                }
+            } else {
+                continue;
+            }
+        } else {
+            alert("Invalid selection. Please enter a number from the list.");
         }
     } else {
-        alert("Invalid selection. Please enter a number from the list.");
+        alert("Exiting archives.");
+        break;
     }
-} else {
-    alert("Exiting archives.");
 }
+```
+
+###### (This entire project was made with AI)
